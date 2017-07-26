@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+	<style type="text/css" media="screen">
+		*{margin: 0px;padding: 0px;list-style: none}
+		#musicList{width: 500px;margin:30px auto;border: 1px solid #ccc;background: #eee}
+		audio{width: 100%}
+		li{border-bottom: 1px solid red;padding: 10px}
+		li p{line-height: 30px;cursor: pointer}
+	</style>
+	<script type="text/javascript" src="./vue.js"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			var songs = [
+				{id:1,src:'./mp3/千千阙歌.mp3',author:'小龙',name:'千千阙歌'},
+				{id:2,src:'./mp3/夜的钢琴曲.mp3',author:'小龙',name:'夜的钢琴曲'},
+				{id:3,src:'./mp3/时间都去哪儿了.mp3',author:'小龙',name:'时间都去哪儿了'},
+				{id:3,src:'./mp3/雨的印记.mp3',author:'小龙',name:'雨的印记'},
+			]
+			var music = new Vue({
+				el:'#musicList',
+				data:{
+					songs:songs,
+					nowSongs:'',
+					iNow:0
+				},
+				methods:{
+					play:function(ele,index){
+						this.iNow = index;
+						//this.nowSongs = ele.src;
+					},
+					//播放下一首方法一
+					nextSong:function(){
+						this.iNow++;
+						if(this.iNow==this.songs.length){
+							this.iNow=0;
+						}
+						//this.nowSongs = songs[this.iNow].src;
+					}
+				},
+				//播放下一首方法二，计算属性的方法，通过改变iNow的值触发computed中的nextS方法
+				computed:{
+					nextS:function(){
+						return this.songs[this.iNow].src;
+					}
+					
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+	<div id="musicList">
+		<audio v-bind:src="nextS" @ended="nextSong" autoplay controls></audio>
+		<ul>
+		<li v-for='(ele,index) in songs'>
+			<p>{{ele.author}}</p>
+			<p  @click="play(ele,index)">{{ele.name}}</p>
+		</li>
+	</ul>
+	</div>
+	
+</body>
+</html>
